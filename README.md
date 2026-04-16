@@ -37,11 +37,10 @@ AskSQL-AI/
 ├── input/
 │   └── questions.txt
 │
-├── output/
-│   └── (generated results)
+├── output/              # Generated results
+├── chroma_db/           # Vector DB (auto-generated)
 │
-├── chroma_db/          # Vector database for retrieval
-├── main.py             # Entry point
+├── main.py              # Entry point
 ├── requirements.txt
 └── README.md
 
@@ -78,7 +77,7 @@ Example Output:
         "sql": "SELECT * FROM employees;",
         "status": "success"
     }
-]
+]s
 
 🔍 Key Components
 🔹 RAG (Retrieval-Augmented Generation)
