@@ -1,0 +1,52 @@
+[
+    {
+        "question": "Top 10 performers in sales last 3 months",
+        "sql": "select so.sales_rep_id, sum(so.total_amount) as total_revenue from sales_orders so where so.order_date >= current_date - interval '3 months' group by so.sales_rep_id order by total_revenue desc limit 10;",
+        "status": "success"
+    },
+    {
+        "question": "Highest paid employees in engineering",
+        "sql": "select e.full_name, e.salary from employees e inner join departments d on e.department_id = d.department_id where d.department_name = 'Engineering' and e.status = 'active' order by e.salary desc limit 10;",
+        "status": "success"
+    },
+    {
+        "question": "Employees with poor attendance this month",
+        "sql": "select a.employee_id, count(*) filter (where a.status = 'leave') as absence_count, count(*) filter (where a.check_out is null and a.status = 'present') as missing_checkouts from attendance a where a.attendance_date >= date_trunc('month', current_date) group by a.employee_id having count(*) filter (where a.status = 'leave') > 0 or count(*) filter (where a.check_out is null and a.status = 'present') > 0 order by absence_count desc, missing_checkouts desc;",
+        "status": "success"
+    },
+    {
+        "question": "Top projects by budget",
+        "sql": "SELECT project_id, project_name, budget FROM projects ORDER BY budget DESC LIMIT 10;",
+        "status": "success"
+    },
+    {
+        "question": "Managers with most team members",
+        "sql": "select m.employee_id, m.full_name, count(*) as team_member_count from employees e inner join employees m on e.manager_id = m.employee_id group by m.employee_id, m.full_name order by team_member_count desc limit 10;",
+        "status": "success"
+    },
+    {
+        "question": "Departments exceeding budget",
+        "sql": "select p.department_id, sum(p.budget) as total_budget, sum(p.actual_cost) as total_actual_cost, (sum(p.actual_cost) - sum(p.budget)) as budget_overrun from projects p group by p.department_id having sum(p.actual_cost) > sum(p.budget);",
+        "status": "success"
+    },
+    {
+        "question": "Employees promoted this year",
+        "sql": "SELECT e.employee_id, e.full_name, p.effective_date, p.increment_pct FROM promotions p INNER JOIN employees e ON p.employee_id = e.employee_id WHERE p.effective_date >= DATE_TRUNC('year', CURRENT_DATE) ORDER BY p.effective_date DESC;",
+        "status": "success"
+    },
+    {
+        "question": "Best sales reps this quarter",
+        "sql": "select e.employee_id, e.full_name, sum(mt.achieved_revenue) as total_achieved, sum(mt.revenue_target) as total_target, (sum(mt.achieved_revenue) / nullif(sum(mt.revenue_target), 0)) as attainment_ratio from employees e inner join monthly_targets mt on e.employee_id = mt.employee_id where mt.target_month >= date_trunc('quarter', current_date) and mt.target_month < date_trunc('quarter', current_date) + interval '3 months' group by e.employee_id, e.full_name order by attainment_ratio desc limit 10;",
+        "status": "success"
+    },
+    {
+        "question": "Open security incidents by severity",
+        "sql": "select severity, count(*) as incident_count from incidents i where status = 'Open' group by severity order by incident_count desc;",
+        "status": "success"
+    },
+    {
+        "question": "Top 5 clients by contract value",
+        "sql": "SELECT c.client_name, c.annual_contract_value FROM clients c ORDER BY c.annual_contract_value DESC LIMIT 5;",
+        "status": "success"
+    }
+]
